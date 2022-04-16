@@ -33,6 +33,7 @@ public class MyParametrizeTest {
         Selenide.open("https://www.mos.ru/search?category=common&page=1");
         $(".mos-search__input").setValue(dataTest);
         $(".mos-search__button").click();
+
         $$(".search-result-item").find(text(dataTest)).shouldBe(visible);
     }
 
@@ -58,14 +59,21 @@ public class MyParametrizeTest {
 
     static Stream<Arguments> methodSourceExampleTest() {
         return Stream.of(
-                Arguments.of("first str", List.of(112, 64)),
-                Arguments.of("second str", List.of(89, 66))
+                Arguments.of("Aleksey", "Dmitrievich"),
+                Arguments.of("Anton", "Pavlovich"),
+                Arguments.of("Egor", "Egorovich"),
+                Arguments.of("Ivan", "Olegovich")
+
         );
     }
 
     @MethodSource("methodSourceExampleTest")
     @ParameterizedTest
-    void methodSourceExampleTest(String s, List<Integer> list) {
-        System.out.println(s + "and list" + list);
+    void methodSourceExampleTest(String firstName, String secondName) {
+        Selenide.open("https://demoqa.com/text-box");
+        $("#userName").setValue(firstName + " " + secondName);
+        $("#submit").click();
+
+        $$("#name.mb-1").find(text(firstName + " " + secondName)).shouldBe(visible);
     }
 }
